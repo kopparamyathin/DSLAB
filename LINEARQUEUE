@@ -1,0 +1,81 @@
+#include<stdio.h>
+#include <stdlib.h>
+#define MAXSIZE 5
+int arr[MAXSIZE];
+int r=-1;
+int f=-1;
+int insert(int x){
+    if (r>=MAXSIZE-1){
+        printf("Queue is Full (Over flow)");
+        return 0;
+    }
+    else if( r==-1 && f==-1){
+        f=0;
+        r=0;
+    }
+    else{
+        r=r+1;
+    }
+    arr[r]=x;
+    printf("Element %d is inserted into Queue",x);
+}
+int delete(){
+    if (r==-1 && f==-1){
+        printf(" Queue is Empty (Under flow)");
+        return 0;
+    }
+    else if( r==0 && f==0){
+        f=-1;
+        r=-1;
+    }
+    else{
+        int item=arr[f];
+        printf("%d is deleted from Queue",item);
+        f=f+1;
+    }
+}
+void display(){
+    if (r==-1 && f==-1){
+        printf(" Queue is Empty (Under flow)");
+    }
+    else
+        printf("\n******QUEUE******\n");
+        for(int i=f;i<=r;i++){
+            printf("%d ",arr[i]);
+        }
+        printf("\n");
+}
+int main() {
+    int choice, element;
+
+    do {
+        printf("\n--- Queue Operations ---\n");
+        printf("1. Insert\n");
+        printf("2. Delete\n");
+        printf("3. Display\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter element to insert: ");
+                scanf("%d", &element);
+                insert(element);
+                break;
+            case 2:
+                delete();
+                break;
+            case 3:
+                display();
+                break;
+            case 4:
+                printf("Exiting program.\n");
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    } while (choice != 4);
+
+    return 0;
+}
