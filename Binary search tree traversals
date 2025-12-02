@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node{
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+struct Node* createNode() {
+    int data;
+    printf("Enter Data:");
+    scanf("%d",&data);
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+void Insert(struct Node* root,struct Node* newNode) {
+    if (newNode->data<root->data) {
+        if(root->left!=NULL)
+            Insert(root->left,newNode);
+        else
+            root->left=newNode;
+        }
+    if (newNode->data>root->data) {
+        if(root->right!=NULL)
+            Insert(root->right,newNode);
+        else
+            root->right=newNode;
+        }
+}
+void inorder(struct Node* root){
+    if(root!=NULL){
+        inorder(root->left);
+        printf("%d ",root->data);
+        inorder(root->right);
+    }
+}
+void preorder(struct Node* root){
+    if(root!=NULL){
+        printf("%d ",root->data);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+int main (){
+    char ch;
+    struct Node* root=NULL;
+    struct Node* temp;
+    do{
+        temp=createNode();
+        if(root==NULL){
+            root=temp;
+        }
+        else
+            Insert(root,temp);
+        printf("Enter More then input y otherwise n ");
+        scanf(" %c",&ch);
+    }while(ch=='Y' || ch=='y');
+    printf("\nIn order Traversal\n");
+    inorder(root);
+    printf("\nPre order Traversal\n");
+    preorder(root);
+    return 0;
+}
