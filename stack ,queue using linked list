@@ -1,0 +1,113 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* head = NULL;
+
+struct Node* createNode(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void InsertAtEnd(struct Node** head, int value) {
+    struct Node* newNode = createNode(value);
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+    struct Node* temp = *head;
+    while (temp->next != NULL)
+        temp = temp->next;
+    temp->next = newNode;
+}
+void DeleteAtBeg(struct Node** head) {
+    if (*head == NULL)
+        return;
+    struct Node* temp = *head;
+    *head = (*head)->next;
+    free(temp);
+}
+
+void DeleteAtEnd(struct Node** head) {
+    if (*head == NULL)
+        return;
+    else if ((*head)->next == NULL) {
+        free(*head);
+        *head = NULL;
+        return;
+    }
+    struct Node* temp = *head;
+    struct Node* prev = NULL;
+    while (temp->next != NULL) {
+        prev = temp;
+        temp = temp->next;
+    }
+    prev->next = NULL;
+    free(temp);
+}
+
+void DisplayList(struct Node* head) {
+    if (head == NULL) {
+        printf("List is empty!\n");
+        return;
+    }
+    struct Node* temp = head;
+    printf("Linked List: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    int choice, value;
+    while (1) {
+        printf("\n--- Operations ---\n");
+        printf("1. Push (Stack Insert)\n");
+        printf("2. Pop (Stack Delete)\n");
+        printf("3. Enqueue (Queue Insert)\n");
+        printf("4. Dequeue (Queue Delete)\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            printf("Enter value: ");
+            scanf("%d", &value);
+            InsertAtEnd(&head, value);
+            DisplayList(head);
+            break;
+
+        case 2:
+            DeleteAtEnd(&head);
+            DisplayList(head);
+            break;
+
+        case 3:
+            printf("Enter value: ");
+            scanf("%d", &value);
+            InsertAtEnd(&head, value);
+            DisplayList(head);
+            break;
+
+        case 4:
+            DeleteAtBeg(&head);
+            DisplayList(head);
+            break;
+
+        case 5:
+            return 0;
+
+        default:
+            printf("Invalid choice.\n");
+        }
+    }
+}
