@@ -1,0 +1,135 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+};
+
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+
+struct Node* createList(struct Node* head, int n) {
+    int value;
+    for (int i = 0; i < n; i++) {
+        printf("Enter value for node %d: ", i + 1);
+        scanf("%d", &value);
+
+        struct Node* newNode = createNode(value);
+        if (head == NULL) {
+            head = newNode;
+        } else {
+            struct Node* temp = head;
+            while (temp->next != NULL)
+                temp = temp->next;
+
+            temp->next = newNode;
+            newNode->prev = temp;
+        }
+    }
+    return head;
+}
+
+struct Node* insertLeft(struct Node* head, int value, int newData) {
+    struct Node* temp = head;
+
+    while (temp != NULL && temp->data != value)
+        temp = temp->next;
+
+    if (temp == NULL)
+        return head;
+
+    struct Node* newNode = createNode(newData);
+    newNode->next = temp;
+    newNode->prev = temp->prev;
+
+    if (temp->prev != NULL)
+        temp->prev->next = newNode;
+    else
+        head = newNode;
+
+    temp->prev = newNode;
+    return head;
+}
+
+struct Node* deleteNode(struct Node* head, int value) {
+    struct Node* temp = head;
+
+    while (temp != NULL && temp->data != value)
+        temp = temp->next;
+
+    if (temp == NULL)
+        return head;
+
+    if (temp->prev != NULL)
+        temp->prev->next = temp->next;
+    else
+        head = temp->next;
+
+    if (temp->next != NULL)
+        temp->next->prev = temp->prev;
+
+    free(temp);
+    return head;
+}
+
+void display(struct Node* head) {
+    struct Node* temp = head;
+    while (temp != NULL) {
+        printf("%d <-> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    struct Node* head = NULL;
+    int choice, value, newData, n;
+
+    while (1) {
+        printf("\n1. Create List\n");
+        printf("2. Insert Left\n");
+        printf("3. Delete Node\n");
+        printf("4. Display\n");
+        printf("5. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter number of nodes to create: ");
+                scanf("%d", &n);
+                head = createList(head, n);
+                break;
+
+            case 2:
+                printf("Enter value: ");
+                scanf("%d", &value);
+                printf("Enter new value: ");
+                scanf("%d", &newData);
+                head = insertLeft(head, value, newData);
+                break;
+
+            case 3:
+                printf("Enter value to delete: ");
+                scanf("%d", &value);
+                head = deleteNode(head, value);
+                break;
+
+            case 4:
+                display(head);
+                break;
+
+            case 5:
+                exit(0);
+        }
+    }
+
+    return 0;
+}
